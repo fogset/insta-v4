@@ -14,7 +14,8 @@ export default function Posts() {
             }
         );
         return unsubscribe;
-    });
+    }, [db]);
+
     return (
         <div>
             {posts.map((post) => (
