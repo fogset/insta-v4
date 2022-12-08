@@ -1,36 +1,30 @@
 import React from "react";
-import { username } from "minifaker";
+import { useEffect, useState } from "react";
 import Post from "./Post";
+import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import { db } from "../firebase";
 
 export default function Posts() {
-    const posts = [
-        {
-            id: "1",
-            username: "codewithsahand",
-            userImg:
-                "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
-            img: "https://images.unsplash.com/photo-1670007770799-8ae5d669c923?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1632&q=80",
-            caption: "Nice picture",
-        },
-        {
-            id: "2",
-            username: "ghavidelsahand",
-            userImg:
-                "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
-            img: "https://images.unsplash.com/photo-1669986884742-87f61afc027d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=802&q=80",
-            caption: "New picture from my city",
-        },
-    ];
+    const [posts, setPosts] = useState([]);
+    useEffect(() => {
+        const unsubscribe = onSnapshot(
+            query(collection(db, "posts"), orderBy("timestamp", "desc")),
+            (snapshot) => {
+                setPosts(snapshot.docs);
+            }
+        );
+        return unsubscribe;
+    });
     return (
         <div>
             {posts.map((post) => (
                 <Post
                     key={post.id}
                     id={post.id}
-                    username={post.username}
-                    userImg={post.userImg}
-                    img={post.img}
-                    caption={post.caption}
+                    username={post.data().username}
+                    userImg={post.data().profileImg}
+                    img={post.data().image}
+                    caption={post.data().caption}
                 />
             ))}
         </div>
