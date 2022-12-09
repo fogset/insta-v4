@@ -41,14 +41,14 @@ export default function Post({ img, userImg, caption, username, id }) {
         );
     }, [db, id]);
     useEffect(() => {
-        setHasLiked(
-            likes.findIndex((like) => like.id === session.user.uid) !== -1
-        );
-    }, [likes]);
-    useEffect(() => {
         const unsubscribe = onSnapshot(
             collection(db, "posts", id, "likes"),
             (snapshot) => setLikes(snapshot.docs)
+        );
+    }, [db]);
+    useEffect(() => {
+        setHasLiked(
+            likes.findIndex((like) => like.id === session?.user.uid) !== -1
         );
     }, [likes]);
     async function likePost() {
