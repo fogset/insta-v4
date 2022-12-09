@@ -20,7 +20,10 @@ export default function Suggestions() {
             </div>
             {suggestions.map((suggestion) => (
                 // eslint-disable-next-line react/jsx-key
-                <div className="flex items-center justify-between mt-3">
+                <div
+                    key={suggestion.id}
+                    className="flex items-center justify-between mt-3"
+                >
                     <img
                         className="h-10 rounded-full border p-[2px]"
                         src={`https://i.pravatar.cc/150?img=${Math.ceil(
